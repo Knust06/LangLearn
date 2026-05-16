@@ -1,0 +1,10 @@
+{
+  "id": "py-002",
+  "language": "python",
+  "topic": "functions",
+  "type": "fill_blank",
+  "question": "Complete the function definition: ___ greet(name):",
+  "options": null,
+  "correct_answer": "def",
+  "explanation": "Python uses 'def' to declare functions, followed by the function name."
+}

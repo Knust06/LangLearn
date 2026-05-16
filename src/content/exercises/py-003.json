@@ -1,0 +1,10 @@
+{
+  "id": "py-003",
+  "language": "python",
+  "topic": "error_handling",
+  "type": "multiple_choice",
+  "question": "Which keyword catches exceptions in Python?",
+  "options": ["catch", "except", "rescue", "handle"],
+  "correct_answer": "except",
+  "explanation": "Python uses try/except blocks, unlike Java/JS which use try/catch."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "py-001",
+  "language": "python",
+  "topic": "variables",
+  "type": "multiple_choice",
+  "question": "Which of the following correctly assigns an integer in Python?",
+  "options": ["var x = 10", "int x = 10", "x = 10", "let x = 10"],
+  "correct_answer": "x = 10",
+  "explanation": "Python uses dynamic typing — no type keyword or declaration syntax needed."
+}

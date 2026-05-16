@@ -1,0 +1,10 @@
+{
+  "id": "js-001",
+  "language": "javascript",
+  "topic": "variables",
+  "type": "multiple_choice",
+  "question": "Which keyword declares a block-scoped variable in modern JS?",
+  "options": ["var", "let", "dim", "local"],
+  "correct_answer": "let",
+  "explanation": "'let' is block-scoped. 'var' is function-scoped and considered legacy."
+}

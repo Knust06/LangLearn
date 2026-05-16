@@ -1,0 +1,10 @@
+{
+  "id": "go-001",
+  "language": "go",
+  "topic": "variables",
+  "type": "fill_blank",
+  "question": "Complete the short variable declaration: x ___ 42",
+  "options": null,
+  "correct_answer": ":=",
+  "explanation": "':=' is Go's short variable declaration operator, inferring the type."
+}
