@@ -1,0 +1,95 @@
+---
+name: Go
+slug: go
+paradigms: [imperative, concurrent]
+typing: static
+best_for: [system tools, cloud services, CLIs, microservices]
+frameworks:
+  - name: Gin
+    use: fast REST APIs
+  - name: Echo
+    use: REST APIs
+  - name: Fiber
+    use: Express-like HTTP server
+glossary:
+  - term: Goroutine
+    definition: A lightweight thread managed by the Go runtime, started with the 'go' keyword
+  - term: Channel
+    definition: A typed conduit for communication between goroutines
+exercises: [go-001]
+---
+
+## Syntax
+
+### Variables
+
+```go
+x := 42              // short declaration
+var name string = "Alice"
+const PI = 3.14
+```
+
+### Functions
+
+```go
+func greet(name string) string {
+    return "Hello, " + name
+}
+
+func divide(a, b float64) (float64, error) {
+    if b == 0 {
+        return 0, errors.New("division by zero")
+    }
+    return a / b, nil
+}
+```
+
+### Classes (Structs)
+
+```go
+type Animal struct {
+    Name string
+}
+
+func (a Animal) Speak() string {
+    return a.Name + " makes a sound"
+}
+```
+
+### Loops
+
+```go
+for i := 0; i < 10; i++ { fmt.Println(i) }
+for _, item := range items { fmt.Println(item) }
+```
+
+### Error Handling
+
+```go
+result, err := divide(10, 0)
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+### Async / Concurrency
+
+```go
+go func() {
+    ch <- fetchData()
+}()
+
+result := <-ch
+```
+
+### Generics
+
+```go
+func Map[T, U any](slice []T, f func(T) U) []U {
+    result := make([]U, len(slice))
+    for i, v := range slice {
+        result[i] = f(v)
+    }
+    return result
+}
+```

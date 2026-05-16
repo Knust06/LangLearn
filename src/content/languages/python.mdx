@@ -1,0 +1,97 @@
+---
+name: Python
+slug: python
+paradigms: [imperative, OOP, functional]
+typing: dynamic
+best_for: [data science, scripting, automation, web]
+frameworks:
+  - name: Django
+    use: full-stack web
+  - name: FastAPI
+    use: REST/async APIs
+  - name: Flask
+    use: minimalist web
+glossary:
+  - term: GIL
+    definition: Global Interpreter Lock — prevents true parallel threads in CPython
+  - term: Decorator
+    definition: Syntax sugar (@func) for wrapping a function with another function
+exercises: [py-001, py-002, py-003]
+---
+
+## Syntax
+
+### Variables
+
+```python
+x = 10
+name = "Alice"
+pi = 3.14
+is_valid = True
+```
+
+### Functions
+
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}"
+```
+
+### Classes
+
+```python
+class Animal:
+    def __init__(self, name: str):
+        self.name = name
+
+    def speak(self) -> str:
+        return f"{self.name} makes a sound"
+```
+
+### Loops
+
+```python
+for i in range(10):
+    print(i)
+
+while condition:
+    do_something()
+```
+
+### Error Handling
+
+```python
+try:
+    result = 10 / 0
+except ZeroDivisionError as e:
+    print(f"Error: {e}")
+finally:
+    print("always runs")
+```
+
+### Async / Concurrency
+
+```python
+import asyncio
+
+async def fetch_data(url: str) -> str:
+    await asyncio.sleep(1)
+    return "data"
+
+asyncio.run(fetch_data("https://example.com"))
+```
+
+### Generics
+
+```python
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self._items: list[T] = []
+
+    def push(self, item: T) -> None:
+        self._items.append(item)
+```

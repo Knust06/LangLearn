@@ -1,0 +1,81 @@
+---
+name: C#
+slug: csharp
+paradigms: [OOP, functional, imperative]
+typing: static
+best_for: [enterprise apps, game dev (Unity), Windows, .NET services]
+frameworks:
+  - name: ASP.NET Core
+    use: web APIs and MVC
+  - name: Entity Framework
+    use: ORM/database access
+  - name: Unity
+    use: game development
+glossary:
+  - term: LINQ
+    definition: Language Integrated Query — SQL-like syntax for querying collections in C#
+  - term: Delegate
+    definition: A type-safe function pointer; the basis for events and lambdas in C#
+exercises: []
+---
+
+## Syntax
+
+### Variables
+
+```csharp
+int x = 10;
+var name = "Alice";   // type inferred
+const double Pi = 3.14;
+```
+
+### Functions
+
+```csharp
+string Greet(string name) => $"Hello, {name}";
+```
+
+### Classes
+
+```csharp
+public class Animal {
+    public string Name { get; }
+    public Animal(string name) => Name = name;
+    public string Speak() => $"{Name} makes a sound";
+}
+```
+
+### Loops
+
+```csharp
+for (int i = 0; i < 10; i++) Console.WriteLine(i);
+foreach (var item in items) Console.WriteLine(item);
+```
+
+### Error Handling
+
+```csharp
+try {
+    int n = int.Parse("abc");
+} catch (FormatException e) {
+    Console.WriteLine(e.Message);
+} finally {
+    Console.WriteLine("always runs");
+}
+```
+
+### Async / Concurrency
+
+```csharp
+async Task<string> FetchDataAsync() {
+    await Task.Delay(100);
+    return "data";
+}
+```
+
+### Generics
+
+```csharp
+T Max<T>(T a, T b) where T : IComparable<T> =>
+    a.CompareTo(b) > 0 ? a : b;
+```

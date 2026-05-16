@@ -1,0 +1,91 @@
+---
+name: Swift
+slug: swift
+paradigms: [OOP, functional, protocol-oriented]
+typing: static
+best_for: [iOS/macOS apps, Apple ecosystem]
+frameworks:
+  - name: SwiftUI
+    use: declarative Apple platform UI
+  - name: UIKit
+    use: imperative iOS UI (legacy)
+  - name: Vapor
+    use: server-side Swift
+glossary:
+  - term: Optional
+    definition: A type that can hold either a value or nil (written as Type?)
+  - term: Protocol
+    definition: Swift's equivalent of an interface — defines a blueprint of methods and properties
+exercises: []
+---
+
+## Syntax
+
+### Variables
+
+```swift
+let name = "Alice"    // constant
+var count = 0         // variable
+let pi: Double = 3.14
+```
+
+### Functions
+
+```swift
+func greet(name: String) -> String {
+    return "Hello, \(name)"
+}
+```
+
+### Classes
+
+```swift
+class Animal {
+    let name: String
+    init(name: String) { self.name = name }
+    func speak() -> String { "\(name) makes a sound" }
+}
+```
+
+### Loops
+
+```swift
+for i in 0..<10 { print(i) }
+for item in items { print(item) }
+```
+
+### Error Handling
+
+```swift
+enum AppError: Error { case notFound }
+
+func find(id: Int) throws -> String {
+    guard id > 0 else { throw AppError.notFound }
+    return "result"
+}
+
+do {
+    let r = try find(id: -1)
+} catch { print(error) }
+```
+
+### Async / Concurrency
+
+```swift
+func fetchData() async -> String {
+    return "data"
+}
+
+Task {
+    let result = await fetchData()
+    print(result)
+}
+```
+
+### Generics
+
+```swift
+func swap<T>(_ a: inout T, _ b: inout T) {
+    let tmp = a; a = b; b = tmp
+}
+```

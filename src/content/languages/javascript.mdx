@@ -1,0 +1,86 @@
+---
+name: JavaScript
+slug: javascript
+paradigms: [imperative, OOP, functional, event-driven]
+typing: dynamic
+best_for: [web frontend, web backend, scripting]
+frameworks:
+  - name: React
+    use: UI components
+  - name: Express
+    use: REST APIs
+  - name: Next.js
+    use: full-stack web
+glossary:
+  - term: Closure
+    definition: A function that captures variables from its outer scope
+  - term: Prototype
+    definition: JavaScript's mechanism for object inheritance
+exercises: [js-001]
+---
+
+## Syntax
+
+### Variables
+
+```javascript
+let count = 0;
+const PI = 3.14;
+var legacy = "avoid this";
+```
+
+### Functions
+
+```javascript
+function greet(name) {
+  return `Hello, ${name}`;
+}
+
+const arrow = (name) => `Hello, ${name}`;
+```
+
+### Classes
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  speak() {
+    return `${this.name} makes a sound`;
+  }
+}
+```
+
+### Loops
+
+```javascript
+for (let i = 0; i < 10; i++) console.log(i);
+for (const item of array) console.log(item);
+array.forEach(item => console.log(item));
+```
+
+### Error Handling
+
+```javascript
+try {
+  JSON.parse("{bad}");
+} catch (e) {
+  console.error(e.message);
+} finally {
+  console.log("always runs");
+}
+```
+
+### Async / Concurrency
+
+```javascript
+async function fetchData(url) {
+  const res = await fetch(url);
+  return res.json();
+}
+```
+
+### Generics
+
+JavaScript has no generics — use TypeScript for typed generics.

@@ -1,0 +1,89 @@
+---
+name: TypeScript
+slug: typescript
+paradigms: [imperative, OOP, functional]
+typing: static (structural)
+best_for: [web frontend, web backend, large codebases]
+frameworks:
+  - name: Angular
+    use: enterprise web apps
+  - name: NestJS
+    use: typed REST APIs
+  - name: tRPC
+    use: end-to-end typed APIs
+glossary:
+  - term: Interface
+    definition: Structural contract — defines the shape of an object without implementation
+  - term: Union Type
+    definition: A type that can be one of several types (string | number)
+exercises: []
+---
+
+## Syntax
+
+### Variables
+
+```typescript
+let count: number = 0;
+const name: string = "Alice";
+const flags: boolean[] = [true, false];
+```
+
+### Functions
+
+```typescript
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+```
+
+### Classes
+
+```typescript
+class Animal {
+  constructor(private name: string) {}
+  speak(): string {
+    return `${this.name} makes a sound`;
+  }
+}
+```
+
+### Loops
+
+```typescript
+for (const item of items) {
+  process(item);
+}
+```
+
+### Error Handling
+
+```typescript
+try {
+  riskyOperation();
+} catch (e: unknown) {
+  if (e instanceof Error) console.error(e.message);
+}
+```
+
+### Async / Concurrency
+
+```typescript
+async function fetchUser(id: number): Promise<User> {
+  const res = await fetch(`/api/users/${id}`);
+  return res.json() as Promise<User>;
+}
+```
+
+### Generics
+
+```typescript
+function identity<T>(value: T): T {
+  return value;
+}
+
+interface Stack<T> {
+  push(item: T): void;
+  pop(): T | undefined;
+}
+```

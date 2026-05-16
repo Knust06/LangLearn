@@ -1,0 +1,96 @@
+---
+name: Rust
+slug: rust
+paradigms: [imperative, functional, systems]
+typing: static
+best_for: [systems programming, WebAssembly, CLI tools, game engines]
+frameworks:
+  - name: Actix-web
+    use: high-performance web APIs
+  - name: Axum
+    use: async web APIs
+  - name: Tokio
+    use: async runtime
+glossary:
+  - term: Ownership
+    definition: Each value has one owner; when the owner goes out of scope the value is dropped
+  - term: Borrow Checker
+    definition: Compile-time system that enforces ownership and lifetime rules
+  - term: Lifetime
+    definition: Annotation that tells the compiler how long a reference is valid
+exercises: []
+---
+
+## Syntax
+
+### Variables
+
+```rust
+let x = 42;          // immutable by default
+let mut count = 0;   // mutable
+const MAX: u32 = 100;
+```
+
+### Functions
+
+```rust
+fn greet(name: &str) -> String {
+    format!("Hello, {}", name)
+}
+```
+
+### Classes (Structs + impl)
+
+```rust
+struct Animal {
+    name: String,
+}
+
+impl Animal {
+    fn speak(&self) -> String {
+        format!("{} makes a sound", self.name)
+    }
+}
+```
+
+### Loops
+
+```rust
+for i in 0..10 { println!("{}", i); }
+for item in &items { println!("{}", item); }
+```
+
+### Error Handling
+
+```rust
+use std::num::ParseIntError;
+
+fn parse(s: &str) -> Result<i32, ParseIntError> {
+    s.trim().parse::<i32>()
+}
+```
+
+### Async / Concurrency
+
+```rust
+use tokio;
+
+#[tokio::main]
+async fn main() {
+    let result = fetch_data().await;
+}
+
+async fn fetch_data() -> String {
+    "data".to_string()
+}
+```
+
+### Generics
+
+```rust
+fn largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+    for item in list { if item > largest { largest = item; } }
+    largest
+}
+```

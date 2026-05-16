@@ -1,0 +1,83 @@
+---
+name: Kotlin
+slug: kotlin
+paradigms: [OOP, functional]
+typing: static
+best_for: [Android development, JVM backend, multiplatform]
+frameworks:
+  - name: Ktor
+    use: async HTTP server/client
+  - name: Spring Boot
+    use: enterprise backend
+  - name: Jetpack Compose
+    use: Android UI
+glossary:
+  - term: Null Safety
+    definition: Kotlin's type system distinguishes nullable (String?) from non-nullable (String) types
+  - term: Data Class
+    definition: Class with auto-generated equals, hashCode, toString, and copy methods
+exercises: []
+---
+
+## Syntax
+
+### Variables
+
+```kotlin
+val name = "Alice"    // immutable
+var count = 0         // mutable
+val pi: Double = 3.14
+```
+
+### Functions
+
+```kotlin
+fun greet(name: String): String = "Hello, $name"
+
+fun divide(a: Double, b: Double): Double? =
+    if (b == 0.0) null else a / b
+```
+
+### Classes
+
+```kotlin
+data class Animal(val name: String) {
+    fun speak(): String = "$name makes a sound"
+}
+```
+
+### Loops
+
+```kotlin
+for (i in 0 until 10) println(i)
+items.forEach { println(it) }
+```
+
+### Error Handling
+
+```kotlin
+try {
+    val n = "abc".toInt()
+} catch (e: NumberFormatException) {
+    println("Not a number: ${e.message}")
+}
+```
+
+### Async / Concurrency
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val result = async { fetchData() }
+    println(result.await())
+}
+
+suspend fun fetchData(): String = "data"
+```
+
+### Generics
+
+```kotlin
+fun <T : Comparable<T>> max(a: T, b: T): T = if (a > b) a else b
+```
