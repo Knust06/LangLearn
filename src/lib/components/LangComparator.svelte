@@ -64,7 +64,7 @@
         {:else}
           <div class="col-header">
             <div class="col-accent"></div>
-            <h2 class="col-title skeleton-title"></h2>
+            <h2 class="col-title skeleton-title" aria-hidden="true">&nbsp;</h2>
           </div>
           <div class="col-body">
             <div class="skeleton-line" style="width: 92%"></div>
