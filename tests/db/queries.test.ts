@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Database from 'better-sqlite3';
-import { createSchema, seedExercise, getExercises, saveAttempt, getProgressStats, getRecentErrors, getNotesFor, upsertNote } from '../../src/routes-backend/db/queries';
+import { createSchema, seedExercise, getExercises, saveAttempt, getProgressStats, getProgressStatsByTopic, getRecentErrors, getNotesFor, upsertNote } from '../../src/routes-backend/db/queries';
 
 let db: Database.Database;
 
@@ -57,6 +57,18 @@ describe('attempts', () => {
     const errors = getRecentErrors(db);
     expect(errors).toHaveLength(1);
     expect(errors[0].exercise_id).toBe('py-001');
+  });
+});
+
+describe('getProgressStatsByTopic', () => {
+  it('filters stats by topic', () => {
+    seedExercise(db, { id: 'py-v', language: 'python', topic: 'variables', type: 'multiple_choice', question: 'Q', options: ['a'], correct_answer: 'a', explanation: '' });
+    seedExercise(db, { id: 'py-f', language: 'python', topic: 'functions', type: 'multiple_choice', question: 'Q2', options: ['b'], correct_answer: 'b', explanation: '' });
+    saveAttempt(db, { exercise_id: 'py-v', answer: 'a', is_correct: true });
+    saveAttempt(db, { exercise_id: 'py-f', answer: 'b', is_correct: true });
+    const stats = getProgressStatsByTopic(db, 'variables');
+    expect(stats).toHaveLength(1);
+    expect(stats[0].total).toBe(1);
   });
 });
 

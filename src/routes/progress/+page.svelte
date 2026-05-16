@@ -3,6 +3,13 @@
   import ProgressChart from '$lib/components/ProgressChart.svelte';
 
   export let data: PageData;
+  const TOPICS = ['', 'variables', 'functions', 'classes', 'loops', 'error_handling', 'async', 'generics'];
+  let topic = data.topic;
+  function filterByTopic() {
+    const p = new URLSearchParams();
+    if (topic) p.set('topic', topic);
+    window.location.href = `/progress?${p}`;
+  }
 </script>
 
 <svelte:head><title>Progress — Lang Learning</title></svelte:head>
@@ -10,6 +17,11 @@
 <main class="container">
   <nav class="breadcrumb"><a href="/">← Home</a></nav>
   <h1>Progress</h1>
+  <div class="topic-filter">
+    <select bind:value={topic} on:change={filterByTopic}>
+      {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
+    </select>
+  </div>
 
   {#if data.stats.length === 0}
     <p class="empty">No attempts yet. <a href="/exercises">Start an exercise →</a></p>
@@ -80,4 +92,14 @@
     padding: 0.1rem 0.4rem; font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-dim);
   }
   .ts { font-size: 0.7rem; color: var(--text-dim); white-space: nowrap; }
+  .topic-filter { margin-bottom: 1.5rem; }
+  .topic-filter select {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
 </style>

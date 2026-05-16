@@ -1,12 +1,14 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import { getDb } from '../../../routes-backend/db/client';
-import { saveAttempt, getProgressStats, getRecentErrors, getExerciseById } from '../../../routes-backend/db/queries';
+import { saveAttempt, getProgressStats, getProgressStatsByTopic, getRecentErrors, getExerciseById } from '../../../routes-backend/db/queries';
 
-export const GET: RequestHandler = () => {
+export const GET: RequestHandler = ({ url }) => {
   const db = getDb();
+  const topic = url.searchParams.get('topic') ?? undefined;
+  const stats = topic ? getProgressStatsByTopic(db, topic) : getProgressStats(db);
   return json({
-    stats: getProgressStats(db),
+    stats,
     recentErrors: getRecentErrors(db)
   });
 };

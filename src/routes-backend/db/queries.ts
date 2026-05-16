@@ -76,6 +76,24 @@ export function getProgressStats(db: Database.Database): ProgressStat[] {
   }));
 }
 
+export function getProgressStatsByTopic(db: Database.Database, topic: string): ProgressStat[] {
+  const rows = db.prepare(`
+    SELECT e.language,
+           COUNT(*) as total,
+           SUM(a.is_correct) as correct
+    FROM attempts a
+    JOIN exercises e ON e.id = a.exercise_id
+    WHERE e.topic = ?
+    GROUP BY e.language
+  `).all(topic) as any[];
+  return rows.map(r => ({
+    language: r.language,
+    total: r.total,
+    correct: r.correct,
+    accuracy: Math.round((r.correct / r.total) * 100)
+  }));
+}
+
 export function getRecentErrors(db: Database.Database, limit = 10): RecentError[] {
   return db.prepare(`
     SELECT a.exercise_id, e.question, e.topic, e.language, a.attempted_at
