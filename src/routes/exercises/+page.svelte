@@ -20,30 +20,46 @@
 
 <main class="container">
   <nav class="breadcrumb"><a href="/">← Home</a></nav>
-  <h1>Exercises</h1>
+
+  <header class="page-header">
+    <h1>Exercises</h1>
+    <p class="subtitle">Practice your skills across languages and topics</p>
+  </header>
 
   <div class="filters">
-    <select bind:value={language} on:change={navigate}>
-      {#each LANGS as l}<option value={l}>{l || 'All languages'}</option>{/each}
-    </select>
-    <select bind:value={topic} on:change={navigate}>
-      {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
-    </select>
+    <div class="filter-group">
+      <label class="filter-label" for="lang-select">Language</label>
+      <select id="lang-select" bind:value={language} on:change={navigate}>
+        {#each LANGS as l}<option value={l}>{l || 'All languages'}</option>{/each}
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label" for="topic-select">Topic</label>
+      <select id="topic-select" bind:value={topic} on:change={navigate}>
+        {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
+      </select>
+    </div>
   </div>
 
   {#if data.exercises.length === 0}
-    <p class="empty">No exercises found for these filters.</p>
+    <div class="empty">
+      <span class="empty-icon">⊘</span>
+      <p>No exercises found for these filters.</p>
+    </div>
   {:else}
     <ul class="list">
       {#each data.exercises as ex}
-        <li>
-          <a href="/exercises/{ex.id}" class="ex-card">
-            <div class="ex-meta">
-              <span class="tag">{ex.language}</span>
-              <span class="tag">{ex.topic}</span>
-              <span class="tag type">{ex.type}</span>
+        <li class="list-item">
+          <a href="/exercises/{ex.id}" class="ex-card" class:type-mc={ex.type === 'multiple_choice'} class:type-fb={ex.type === 'fill_blank'}>
+            <span class="rail"></span>
+            <div class="card-body">
+              <div class="ex-meta">
+                <span class="tag">{ex.language}</span>
+                <span class="tag">{ex.topic}</span>
+              </div>
+              <p class="ex-q">{ex.question}</p>
             </div>
-            <p class="ex-q">{ex.question}</p>
+            <span class="arrow">→</span>
           </a>
         </li>
       {/each}
@@ -52,42 +68,179 @@
 </main>
 
 <style>
-  .breadcrumb { padding: 1.5rem 0 0; }
-  .breadcrumb a { color: var(--text-dim); font-size: 0.875rem; }
-  h1 { font-family: var(--font-mono); font-size: 1.5rem; margin: 0.5rem 0 1rem; }
-  .filters { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
-  select {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 0.4rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    cursor: pointer;
+  .breadcrumb {
+    padding: 1.5rem 0 0;
   }
-  .list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .breadcrumb a {
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color var(--t);
+  }
+  .breadcrumb a:hover {
+    color: var(--text);
+  }
+
+  .page-header {
+    margin: 1.5rem 0 2rem;
+    animation: fadeUp 0.4s ease both;
+  }
+  h1 {
+    font-family: var(--font);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.4s 0.05s ease both;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .filter-label {
+    font-family: var(--font);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+  select {
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 0.82rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    padding-right: 1.8rem;
+    transition: border-color var(--t), background var(--t);
+    outline: none;
+  }
+  select:hover {
+    border-color: var(--border-3);
+  }
+  select:focus {
+    border-color: var(--cyan-border);
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .list-item {
+    animation: fadeUp 0.35s ease both;
+  }
+  .list-item:nth-child(1) { animation-delay: 0.08s; }
+  .list-item:nth-child(2) { animation-delay: 0.13s; }
+  .list-item:nth-child(3) { animation-delay: 0.18s; }
+  .list-item:nth-child(4) { animation-delay: 0.23s; }
+  .list-item:nth-child(5) { animation-delay: 0.28s; }
+  .list-item:nth-child(n+6) { animation-delay: 0.3s; }
+
   .ex-card {
-    display: block;
-    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
     text-decoration: none;
     color: var(--text);
-    transition: border-color 0.15s;
+    overflow: hidden;
+    transition: background var(--t), border-color var(--t);
+    position: relative;
   }
-  .ex-card:hover { border-color: var(--accent); text-decoration: none; }
-  .ex-meta { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .ex-card:hover {
+    background: var(--surface-2);
+    border-color: var(--border-2);
+  }
+
+  .rail {
+    width: 3px;
+    align-self: stretch;
+    flex-shrink: 0;
+    background: var(--border-2);
+    transition: background var(--t);
+  }
+  .type-mc .rail { background: var(--cyan); }
+  .type-fb .rail { background: var(--green); }
+
+  .card-body {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    min-width: 0;
+  }
+  .ex-meta {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.45rem;
+  }
   .tag {
-    background: var(--bg3);
+    background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.1rem 0.4rem;
-    font-size: 0.7rem;
+    border-radius: calc(var(--radius) / 1.5);
+    padding: 0.1rem 0.45rem;
+    font-size: 0.68rem;
     font-family: var(--font-mono);
     color: var(--text-dim);
   }
-  .tag.type { color: var(--accent2); border-color: var(--accent2); }
-  .ex-q { margin: 0; font-size: 0.9rem; }
-  .empty { color: var(--text-dim); }
+  .ex-q {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .arrow {
+    padding: 0 1rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: color var(--t), transform var(--t);
+  }
+  .ex-card:hover .arrow {
+    color: var(--cyan);
+    transform: translateX(2px);
+  }
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 4rem 0;
+    color: var(--text-muted);
+    animation: fadeUp 0.4s ease both;
+  }
+  .empty-icon {
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+  .empty p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
 </style>

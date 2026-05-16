@@ -29,19 +29,24 @@
 
 <div class="note-editor">
   <button class="toggle" on:click={() => (open = !open)}>
-    {open ? 'Hide Notes' : `Notes (${notes.length})`}
+    {open ? `▲ Notes (${notes.length})` : `▼ Notes (${notes.length})`}
   </button>
 
   {#if open}
     <div class="panel">
-      {#each notes as note}
-        <div class="note">
-          <p>{note.content}</p>
-          <span class="ts">{note.updated_at}</span>
+      {#if notes.length > 0}
+        <div class="notes-list">
+          {#each notes as note}
+            <div class="note">
+              <p class="note-content">{note.content}</p>
+              <span class="ts">{note.updated_at}</span>
+            </div>
+          {/each}
         </div>
-      {/each}
+      {/if}
+
       <textarea bind:value={draft} placeholder="Add a note…" rows="3"></textarea>
-      <button on:click={save} disabled={!draft.trim()}>Save Note</button>
+      <button class="save-btn" on:click={save} disabled={!draft.trim()}>Save</button>
     </div>
   {/if}
 </div>
@@ -50,51 +55,96 @@
   .toggle {
     background: none;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: var(--radius);
     color: var(--text-dim);
     cursor: pointer;
-    font-size: 0.8rem;
-    padding: 0.3rem 0.75rem;
-    margin-top: 1rem;
+    font-family: var(--font);
+    font-size: 0.78rem;
+    padding: 0.35rem 0.8rem;
+    transition: border-color var(--t), color var(--t);
+    letter-spacing: 0.02em;
   }
-  .toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .toggle:hover {
+    border-color: var(--border-2);
+    color: var(--text);
+  }
+
   .panel {
-    background: var(--bg2);
+    background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: var(--radius);
     margin-top: 0.5rem;
-    padding: 0.75rem;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .notes-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
+
   .note {
-    border-left: 2px solid var(--accent);
+    border-left: 2px solid var(--cyan);
     padding-left: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
-  .note p { margin: 0; font-size: 0.875rem; }
-  .ts { font-size: 0.7rem; color: var(--text-dim); }
-  textarea {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text);
-    font-family: var(--font-sans);
+  .note-content {
+    margin: 0;
     font-size: 0.875rem;
-    padding: 0.5rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .ts {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  textarea {
+    background: var(--surface-3);
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.875rem;
+    padding: 0.6rem 0.75rem;
     resize: vertical;
     width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color var(--t);
+    line-height: 1.5;
   }
-  button[disabled] { opacity: 0.4; cursor: not-allowed; }
-  button:not(.toggle) {
-    align-self: flex-end;
-    background: var(--accent);
+  textarea:focus {
+    border-color: var(--cyan-border);
+  }
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .save-btn {
+    align-self: flex-start;
+    background: var(--cyan);
     border: none;
-    border-radius: 4px;
-    color: #1e1e1e;
+    border-radius: var(--radius);
+    color: var(--void);
     cursor: pointer;
-    font-size: 0.8rem;
+    font-family: var(--font);
+    font-size: 0.78rem;
     font-weight: 600;
-    padding: 0.35rem 0.9rem;
+    padding: 0.35rem 0.85rem;
+    transition: opacity var(--t);
+  }
+  .save-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .save-btn:not(:disabled):hover {
+    opacity: 0.85;
   }
 </style>
