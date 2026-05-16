@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t } from '$lib/stores/locale';
+
   const languages = [
     { name: 'Python',     slug: 'python',     typing: 'dynamic',             color: '#3572A5', icon: 'Py' },
     { name: 'JavaScript', slug: 'javascript', typing: 'dynamic',             color: '#F1E05A', icon: 'JS' },
@@ -9,12 +11,6 @@
     { name: 'Swift',      slug: 'swift',      typing: 'static',              color: '#F05138', icon: 'Sw' },
     { name: 'C#',         slug: 'csharp',     typing: 'static',              color: '#178600', icon: 'C#' },
   ];
-
-  const features = [
-    { href: '/compare',   label: 'Compare',   desc: 'Side-by-side syntax'  },
-    { href: '/exercises', label: 'Exercises', desc: 'Test your knowledge'  },
-    { href: '/progress',  label: 'Progress',  desc: 'Track accuracy'       },
-  ];
 </script>
 
 <svelte:head><title>Codex — Language Learning</title></svelte:head>
@@ -22,23 +18,22 @@
 <div class="page">
   <section class="hero container">
     <div class="hero-eyebrow">
-      <span class="badge">v1.0</span>
+      <span class="badge">{$t.home.badge}</span>
       <span class="sep">/</span>
-      <span class="eyebrow-text">8 languages · syntax · exercises</span>
+      <span class="eyebrow-text">{$t.home.eyebrow}</span>
     </div>
     <h1 class="hero-title">
-      Learn every language.<br>
-      <span class="gradient-text">Side by side.</span>
+      {$t.home.heroLine1}<br>
+      <span class="gradient-text">{$t.home.heroAccent}</span>
     </h1>
     <p class="hero-sub">
-      A precision reference for intermediate developers. Compare syntax,
-      explore frameworks, drill exercises — all in one place.
+      {$t.home.sub}
     </p>
     <div class="cta-row">
-      {#each features as f}
-        <a href={f.href} class="cta-card">
-          <span class="cta-label">{f.label}</span>
-          <span class="cta-desc">{f.desc}</span>
+      {#each ['/compare', '/exercises', '/progress'] as href, i}
+        <a href={href} class="cta-card">
+          <span class="cta-label">{$t.home.features[i].label}</span>
+          <span class="cta-desc">{$t.home.features[i].desc}</span>
         </a>
       {/each}
     </div>
@@ -46,8 +41,8 @@
 
   <section class="langs container">
     <div class="section-head">
-      <span class="section-label">Languages</span>
-      <span class="section-count">8 covered</span>
+      <span class="section-label">{$t.home.langSection}</span>
+      <span class="section-count">{$t.home.langCount}</span>
     </div>
     <div class="lang-grid">
       {#each languages as lang, i}

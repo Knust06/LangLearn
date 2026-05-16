@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import ProgressChart from '$lib/components/ProgressChart.svelte';
+  import { t } from '$lib/stores/locale';
 
   export let data: PageData;
   const TOPICS = ['', 'variables', 'functions', 'classes', 'loops', 'error_handling', 'async', 'generics'];
@@ -12,23 +13,23 @@
   }
 </script>
 
-<svelte:head><title>Progress — Lang Learning</title></svelte:head>
+<svelte:head><title>{$t.progress.title} — Lang Learning</title></svelte:head>
 
 <main class="container">
-  <nav class="breadcrumb"><a href="/">← Home</a></nav>
+  <nav class="breadcrumb"><a href="/">{$t.progress.back}</a></nav>
 
   <header class="page-header">
-    <h1>Progress</h1>
+    <h1>{$t.progress.title}</h1>
     <select bind:value={topic} on:change={filterByTopic}>
-      {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
+      {#each TOPICS as tp}<option value={tp}>{tp || $t.progress.allTopics}</option>{/each}
     </select>
   </header>
 
   {#if data.stats.length === 0}
     <div class="empty-state">
       <div class="empty-icon">◎</div>
-      <p class="empty-msg">No attempts recorded yet.</p>
-      <a href="/exercises" class="empty-cta">Start an exercise →</a>
+      <p class="empty-msg">{$t.progress.empty}</p>
+      <a href="/exercises" class="empty-cta">{$t.progress.startExercise}</a>
     </div>
   {:else}
     <section class="stats-grid">
@@ -37,7 +38,7 @@
         <div class="stat-card">
           <span class="lang-label">{stat.language}</span>
           <div class="accuracy" class:green={pct >= 80}>{pct}<span class="pct-sign">%</span></div>
-          <div class="sub">{stat.correct}/{stat.total} correct</div>
+          <div class="sub">{stat.correct}/{stat.total} {$t.progress.correct}</div>
           <div class="bar-track">
             <div class="bar-fill" class:bar-green={pct >= 80} style="width: {pct}%"></div>
           </div>
@@ -46,13 +47,13 @@
     </section>
 
     <section class="chart-section">
-      <div class="section-label">Evolution</div>
+      <div class="section-label">{$t.progress.evolution}</div>
       <ProgressChart stats={data.stats} />
     </section>
 
     {#if data.recentErrors.length > 0}
       <section class="errors-section">
-        <div class="section-label">Recent Errors</div>
+        <div class="section-label">{$t.progress.recentErrors}</div>
         <ul class="error-list">
           {#each data.recentErrors as err}
             <li class="error-item">

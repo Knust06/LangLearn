@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { t } from '$lib/stores/locale';
   export let data: PageData;
 
   const LANGS = ['', 'python', 'javascript', 'typescript', 'go', 'rust', 'kotlin', 'swift', 'csharp'];
@@ -16,27 +17,27 @@
   }
 </script>
 
-<svelte:head><title>Exercises — Lang Learning</title></svelte:head>
+<svelte:head><title>{$t.exercises.title} — Lang Learning</title></svelte:head>
 
 <main class="container">
-  <nav class="breadcrumb"><a href="/">← Home</a></nav>
+  <nav class="breadcrumb"><a href="/">{$t.exercises.back}</a></nav>
 
   <header class="page-header">
-    <h1>Exercises</h1>
-    <p class="subtitle">Practice your skills across languages and topics</p>
+    <h1>{$t.exercises.title}</h1>
+    <p class="subtitle">{$t.exercises.subtitle}</p>
   </header>
 
   <div class="filters">
     <div class="filter-group">
-      <label class="filter-label" for="lang-select">Language</label>
+      <label class="filter-label" for="lang-select">{$t.exercises.filterLang}</label>
       <select id="lang-select" bind:value={language} on:change={navigate}>
-        {#each LANGS as l}<option value={l}>{l || 'All languages'}</option>{/each}
+        {#each LANGS as l}<option value={l}>{l || $t.exercises.allLangs}</option>{/each}
       </select>
     </div>
     <div class="filter-group">
-      <label class="filter-label" for="topic-select">Topic</label>
+      <label class="filter-label" for="topic-select">{$t.exercises.filterTopic}</label>
       <select id="topic-select" bind:value={topic} on:change={navigate}>
-        {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
+        {#each TOPICS as tp}<option value={tp}>{tp || $t.exercises.allTopics}</option>{/each}
       </select>
     </div>
   </div>
@@ -44,7 +45,7 @@
   {#if data.exercises.length === 0}
     <div class="empty">
       <span class="empty-icon">⊘</span>
-      <p>No exercises found for these filters.</p>
+      <p>{$t.exercises.empty}</p>
     </div>
   {:else}
     <ul class="list">

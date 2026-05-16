@@ -1,15 +1,12 @@
 <script lang="ts">
   import '../app.css';
   import { page } from '$app/stores';
+  import { locale, t } from '$lib/stores/locale';
+  import type { Locale } from '$lib/stores/locale';
 
   let { children } = $props();
 
-  const links = [
-    { href: '/',          label: 'Home' },
-    { href: '/compare',   label: 'Compare' },
-    { href: '/exercises', label: 'Exercises' },
-    { href: '/progress',  label: 'Progress' },
-  ];
+  const LOCALES: Locale[] = ['en', 'pt'];
 </script>
 
 <svelte:head>
@@ -24,7 +21,12 @@
       <span class="wordmark-text">codex</span>
     </a>
     <nav class="nav">
-      {#each links as link}
+      {#each [
+        { href: '/',          label: $t.nav.home      },
+        { href: '/compare',   label: $t.nav.compare   },
+        { href: '/exercises', label: $t.nav.exercises },
+        { href: '/progress',  label: $t.nav.progress  },
+      ] as link}
         <a
           href={link.href}
           class="nav-link"
@@ -32,6 +34,17 @@
         >{link.label}</a>
       {/each}
     </nav>
+
+    <div class="locale-toggle">
+      {#each LOCALES as l}
+        <button
+          class="locale-btn"
+          class:active={$locale === l}
+          on:click={() => locale.set(l)}
+          aria-label="Switch language to {l.toUpperCase()}"
+        >{l.toUpperCase()}</button>
+      {/each}
+    </div>
   </div>
 </header>
 
@@ -110,4 +123,43 @@
   }
 
   main { min-height: calc(100vh - 52px); }
+
+  /* ── Locale toggle ── */
+  .locale-toggle {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius);
+    padding: 2px;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .locale-btn {
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.22rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--text-muted);
+    background: transparent;
+    transition: background 0.15s var(--t), color 0.15s var(--t), border-color 0.15s var(--t);
+    line-height: 1;
+  }
+
+  .locale-btn:hover {
+    color: var(--text);
+    background: var(--surface-3);
+  }
+
+  .locale-btn.active {
+    background: var(--cyan-soft);
+    border-color: var(--cyan-border);
+    color: var(--cyan);
+  }
 </style>
