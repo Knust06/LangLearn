@@ -16,45 +16,54 @@
 
 <main class="container">
   <nav class="breadcrumb"><a href="/">← Home</a></nav>
-  <h1>Progress</h1>
-  <div class="topic-filter">
+
+  <header class="page-header">
+    <h1>Progress</h1>
     <select bind:value={topic} on:change={filterByTopic}>
       {#each TOPICS as t}<option value={t}>{t || 'All topics'}</option>{/each}
     </select>
-  </div>
+  </header>
 
   {#if data.stats.length === 0}
-    <p class="empty">No attempts yet. <a href="/exercises">Start an exercise →</a></p>
+    <div class="empty-state">
+      <div class="empty-icon">◎</div>
+      <p class="empty-msg">No attempts recorded yet.</p>
+      <a href="/exercises" class="empty-cta">Start an exercise →</a>
+    </div>
   {:else}
-    <section class="cards">
+    <section class="stats-grid">
       {#each data.stats as stat}
+        {@const pct = stat.accuracy}
         <div class="stat-card">
-          <h2>{stat.language}</h2>
-          <div class="accuracy">{stat.accuracy}%</div>
+          <span class="lang-label">{stat.language}</span>
+          <div class="accuracy" class:green={pct >= 80}>{pct}<span class="pct-sign">%</span></div>
           <div class="sub">{stat.correct}/{stat.total} correct</div>
+          <div class="bar-track">
+            <div class="bar-fill" class:bar-green={pct >= 80} style="width: {pct}%"></div>
+          </div>
         </div>
       {/each}
     </section>
 
     <section class="chart-section">
-      <h2>Overview</h2>
-      <div class="chart-wrap">
-        <ProgressChart stats={data.stats} />
-      </div>
+      <div class="section-label">Evolution</div>
+      <ProgressChart stats={data.stats} />
     </section>
 
     {#if data.recentErrors.length > 0}
-      <section class="errors">
-        <h2>Recent Errors</h2>
-        <ul>
+      <section class="errors-section">
+        <div class="section-label">Recent Errors</div>
+        <ul class="error-list">
           {#each data.recentErrors as err}
-            <li>
-              <a href="/exercises/{err.exercise_id}">
-                <span class="tag">{err.language}</span>
-                <span class="tag">{err.topic}</span>
-                {err.question}
+            <li class="error-item">
+              <a href="/exercises/{err.exercise_id}" class="error-link">
+                <div class="error-pills">
+                  <span class="pill">{err.language}</span>
+                  <span class="pill">{err.topic}</span>
+                </div>
+                <p class="error-question">{err.question}</p>
               </a>
-              <span class="ts">{err.attempted_at}</span>
+              <span class="error-ts">{err.attempted_at}</span>
             </li>
           {/each}
         </ul>
@@ -64,42 +73,260 @@
 </main>
 
 <style>
-  .breadcrumb { padding: 1.5rem 0 0; }
-  .breadcrumb a { color: var(--text-dim); font-size: 0.875rem; }
-  h1 { font-family: var(--font-mono); font-size: 1.5rem; margin: 0.5rem 0 1.5rem; }
-  .empty { color: var(--text-dim); }
-  .cards { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-  .stat-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem;
-    min-width: 140px;
-    text-align: center;
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
   }
-  .stat-card h2 { font-family: var(--font-mono); font-size: 0.9rem; margin: 0 0 0.5rem; color: var(--text-dim); }
-  .accuracy { font-size: 2rem; font-weight: 700; color: var(--accent2); }
-  .sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem; }
-  .chart-section { margin-bottom: 2rem; }
-  .chart-section h2 { font-family: var(--font-mono); font-size: 1rem; margin-bottom: 1rem; }
-  .chart-wrap { max-width: 600px; }
-  .errors ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-  .errors li { display: flex; align-items: baseline; gap: 0.75rem; font-size: 0.875rem; }
-  .errors a { color: var(--text); text-decoration: none; display: flex; gap: 0.4rem; align-items: baseline; flex-wrap: wrap; }
-  .errors a:hover { color: var(--accent); }
-  .tag {
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
-    padding: 0.1rem 0.4rem; font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-dim);
+
+  .breadcrumb {
+    padding: 1.5rem 0 0;
   }
-  .ts { font-size: 0.7rem; color: var(--text-dim); white-space: nowrap; }
-  .topic-filter { margin-bottom: 1.5rem; }
-  .topic-filter select {
-    background: var(--bg2);
-    border: 1px solid var(--border);
+  .breadcrumb a {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color var(--t);
+    font-family: var(--font-mono);
+  }
+  .breadcrumb a:hover {
+    color: var(--text-dim);
+  }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.75rem 0 2rem;
+    gap: 1rem;
+  }
+  h1 {
+    font-family: var(--font);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .page-header select {
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
     color: var(--text);
-    padding: 0.4rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius);
+    font-size: 0.82rem;
+    font-family: var(--font);
     cursor: pointer;
+    transition: border-color var(--t), color var(--t);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23454A6A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    padding-right: 2rem;
+  }
+  .page-header select:hover,
+  .page-header select:focus {
+    border-color: var(--border-3);
+    color: var(--text-bright);
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 5rem 2rem;
+    animation: fadeUp 0.4s ease both;
+  }
+  .empty-icon {
+    font-size: 2.5rem;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+  .empty-msg {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  .empty-cta {
+    display: inline-block;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    color: var(--cyan);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-family: var(--font);
+    text-decoration: none;
+    margin-top: 0.25rem;
+    transition: background var(--t), border-color var(--t), color var(--t);
+  }
+  .empty-cta:hover {
+    background: var(--cyan-soft);
+    border-color: var(--cyan-border);
+    color: var(--text-bright);
+  }
+
+  /* ── Stats grid ── */
+  .stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.35s ease both;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem 0.85rem;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    transition: border-color var(--t);
+  }
+  .stat-card:hover {
+    border-color: var(--border-2);
+  }
+  .lang-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.3rem;
+  }
+  .accuracy {
+    font-family: var(--font);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--cyan);
+    letter-spacing: -0.04em;
+    transition: color var(--t);
+  }
+  .accuracy.green {
+    color: var(--green);
+  }
+  .pct-sign {
+    font-size: 1.1rem;
+    font-weight: 600;
+    opacity: 0.7;
+    margin-left: 1px;
+  }
+  .sub {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    margin-top: 0.15rem;
+    margin-bottom: 0.65rem;
+  }
+  .bar-track {
+    width: 100%;
+    height: 3px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: auto;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--cyan);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .bar-fill.bar-green {
+    background: var(--green);
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+  }
+
+  /* ── Chart ── */
+  .chart-section {
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.4s 0.05s ease both;
+  }
+
+  /* ── Recent Errors ── */
+  .errors-section {
+    animation: fadeUp 0.4s 0.1s ease both;
+  }
+  .error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .error-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--red);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    transition: border-color var(--t), background var(--t);
+  }
+  .error-item:hover {
+    background: var(--surface-2);
+    border-color: var(--border-2);
+    border-left-color: var(--red);
+  }
+  .error-link {
+    flex: 1;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .error-pills {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .pill {
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.08rem 0.5rem;
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+  }
+  .error-question {
+    font-size: 0.855rem;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.45;
+  }
+  .error-link:hover .error-question {
+    color: var(--text-bright);
+  }
+  .error-ts {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
   }
 </style>
