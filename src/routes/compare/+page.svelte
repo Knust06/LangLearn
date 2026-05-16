@@ -4,14 +4,41 @@
 
 <svelte:head><title>Compare — Lang Learning</title></svelte:head>
 
-<main class="container">
-  <nav class="breadcrumb"><a href="/">← Home</a></nav>
-  <h1>Side-by-Side Comparison</h1>
+<main class="compare-page">
+  <header class="page-header">
+    <h1 class="page-title">Compare</h1>
+    <p class="page-subtitle">Select 2–3 languages to see them side by side</p>
+  </header>
   <LangComparator />
 </main>
 
 <style>
-  .breadcrumb { padding: 1.5rem 0 0; }
-  .breadcrumb a { color: var(--text-dim); font-size: 0.875rem; }
-  h1 { font-family: var(--font-mono); font-size: 1.5rem; margin: 0.5rem 0 1.5rem; }
+  .compare-page {
+    padding: 2.5rem 2rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.4s var(--t) both;
+  }
+
+  .page-title {
+    font-family: var(--font);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--text-bright);
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .page-subtitle {
+    font-family: var(--font);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
 </style>
