@@ -16,6 +16,27 @@ glossary:
     definition: A lightweight thread managed by the Go runtime, started with the 'go' keyword
   - term: Channel
     definition: A typed conduit for communication between goroutines
+projects:
+  - name: REST Microservice with Gin
+    description: HTTP API using Gin with middleware chain (auth, logging, CORS), PostgreSQL via pgx, structured JSON logging with slog, and graceful shutdown.
+    difficulty: intermediate
+    concepts: [Gin, pgx, slog, Middleware, Graceful Shutdown, context]
+  - name: CLI Tool with Cobra
+    description: Multi-command CLI using Cobra with persistent flags, config file via Viper, shell completion generation, and colored terminal output.
+    difficulty: beginner
+    concepts: [Cobra, Viper, os/exec, flag, Shell Completions]
+  - name: Worker Pool with Channels
+    description: Fan-out/fan-in job processor with a configurable pool of goroutines, a results aggregation channel, context-based cancellation, and graceful drain on shutdown.
+    difficulty: intermediate
+    concepts: [Goroutines, Channels, sync.WaitGroup, context, Fan-out/Fan-in]
+  - name: gRPC Server
+    description: Service defined with Protocol Buffers featuring unary and server-streaming RPCs, interceptors for auth and logging, and a generated Go client for integration tests.
+    difficulty: advanced
+    concepts: [gRPC, Protocol Buffers, Interceptors, streaming, protoc-gen-go]
+  - name: In-Memory Key-Value Store
+    description: TCP server that speaks a simple text protocol (GET/SET/DEL), stores data in a map protected by sync.RWMutex, and supports TTL expiry with a background sweeper goroutine.
+    difficulty: advanced
+    concepts: [net.Listener, sync.RWMutex, goroutines, TTL, Binary Protocol]
 exercises: [go-001]
 ---
 

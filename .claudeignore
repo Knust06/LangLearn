@@ -1,0 +1,92 @@
+# ===== Universal .claudeignore — D:\Projetos standard =====
+# Deps
+node_modules/
+**/node_modules/
+vendor/
+bower_components/
+
+# Build output
+dist/
+build/
+out/
+coverage/
+.astro/
+.next/
+.nuxt/
+.svelte-kit/
+.output/
+
+# .NET
+bin/
+obj/
+
+# Ruby / Rails
+tmp/
+log/
+.bundle/
+vendor/bundle/
+
+# Caches / VCS
+.git/
+.cache/
+.turbo/
+.vite/
+.parcel-cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Python envs
+.venv/
+venv/
+env/
+
+# Lockfiles (huge, pure noise)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Gemfile.lock
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Databases + runtime
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.bak
+
+# Big binary / data blobs
+*.pdf
+*.csv
+*.zip
+*.7z
+*.tar
+*.gz
+
+# Temp media / screenshots
+temp_*.png
+temp_*.jpg
+screenshot*.png
+*.gif
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Untrusted scratch (do not trust as current state)
+.superpowers/
+.impeccable/
+.DS_Store

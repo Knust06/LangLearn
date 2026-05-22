@@ -1,5 +1,12 @@
 // src/lib/types/index.ts
 
+export interface LanguageProject {
+  name: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  concepts: string[];
+}
+
 export interface Language {
   name: string;
   slug: string;
@@ -8,6 +15,7 @@ export interface Language {
   best_for: string[];
   frameworks: { name: string; use: string }[];
   glossary: { term: string; definition: string }[];
+  projects: LanguageProject[];
   exercises: string[];
 }
 

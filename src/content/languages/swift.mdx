@@ -16,6 +16,27 @@ glossary:
     definition: A type that can hold either a value or nil (written as Type?)
   - term: Protocol
     definition: Swift's equivalent of an interface — defines a blueprint of methods and properties
+projects:
+  - name: SwiftUI iOS App
+    description: Task manager app with SwiftUI, @StateObject + ObservableObject for state, NavigationStack for routing, UserDefaults persistence, and widget extension.
+    difficulty: beginner
+    concepts: [SwiftUI, @StateObject, NavigationStack, UserDefaults, WidgetKit, MVVM]
+  - name: Networking Layer
+    description: Generic async/await network client using URLSession, Codable for JSON mapping, custom error enum, and retry logic with exponential backoff. Unit-tested with mock URLProtocol.
+    difficulty: intermediate
+    concepts: [URLSession, Codable, async/await, URLProtocol, Error Handling, Generics]
+  - name: Vapor REST API
+    description: Server-side Swift API with Vapor, Fluent ORM with PostgreSQL, JWT authentication, migrations, and automatic OpenAPI documentation via Leaf templates.
+    difficulty: intermediate
+    concepts: [Vapor, Fluent ORM, JWT, Migrations, async/await, PostgreSQL]
+  - name: Combine Data Pipeline
+    description: Reactive pipeline using Combine that fetches paginated API data, applies operators (map, filter, debounce, catch), and binds results directly to SwiftUI views.
+    difficulty: advanced
+    concepts: [Combine, Publisher, AnyPublisher, debounce, flatMap, @Published, SwiftUI binding]
+  - name: Core Data + CloudKit App
+    description: Offline-first app with Core Data for local storage, NSPersistentCloudKitContainer for iCloud sync, NSFetchedResultsController for live queries, and conflict resolution.
+    difficulty: advanced
+    concepts: [Core Data, CloudKit, NSFetchedResultsController, NSManagedObject, iCloud Sync, Migrations]
 exercises: []
 ---
 

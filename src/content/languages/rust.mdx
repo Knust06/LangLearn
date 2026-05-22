@@ -18,6 +18,27 @@ glossary:
     definition: Compile-time system that enforces ownership and lifetime rules
   - term: Lifetime
     definition: Annotation that tells the compiler how long a reference is valid
+projects:
+  - name: HTTP API with Axum
+    description: Async REST API using Axum with typed extractors, shared State via Arc, SQLite persistence with sqlx, custom error types that implement IntoResponse.
+    difficulty: intermediate
+    concepts: [Axum, sqlx, Arc, IntoResponse, Extractors, async/await]
+  - name: CLI Tool with clap
+    description: Multi-subcommand CLI using clap derive macros, custom error types with thiserror, colored output with colored, and file processing with rayon for parallelism.
+    difficulty: beginner
+    concepts: [clap, thiserror, rayon, colored, std::fs, Error Trait]
+  - name: Concurrent File Processor
+    description: Reads a directory of large files in parallel with rayon, applies transformations per line, aggregates results, and writes output — all with zero unsafe code.
+    difficulty: intermediate
+    concepts: [rayon, std::fs, Iterator Adapters, Custom Error, Result chaining, Ownership]
+  - name: WebAssembly Module
+    description: Rust library compiled to WASM with wasm-bindgen, exposing typed functions to JavaScript, using js_sys and web_sys for DOM interaction, built with wasm-pack.
+    difficulty: advanced
+    concepts: [wasm-bindgen, wasm-pack, js_sys, web_sys, #[wasm_bindgen], no_std]
+  - name: Async TCP Chat Server
+    description: Multi-room chat server built on Tokio with one task per connection, a broadcast channel per room, graceful shutdown via CancellationToken, and a custom framing protocol.
+    difficulty: advanced
+    concepts: [Tokio, broadcast::channel, TcpListener, CancellationToken, Pin, select!]
 exercises: []
 ---
 

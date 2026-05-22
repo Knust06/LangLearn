@@ -16,6 +16,27 @@ glossary:
     definition: Global Interpreter Lock — prevents true parallel threads in CPython
   - term: Decorator
     definition: Syntax sugar (@func) for wrapping a function with another function
+projects:
+  - name: FastAPI CRUD Service
+    description: REST API with FastAPI, SQLAlchemy async ORM, Pydantic schemas for validation, and Alembic migrations. Includes JWT auth and dependency injection.
+    difficulty: intermediate
+    concepts: [FastAPI, SQLAlchemy, Pydantic, Alembic, JWT, async/await]
+  - name: Data Pipeline with pandas
+    description: ETL pipeline that reads raw CSV exports, cleans and transforms data with pandas, computes aggregations, and outputs both Parquet files and a summary report.
+    difficulty: beginner
+    concepts: [pandas, ETL, CSV, Parquet, Data Cleaning, groupby]
+  - name: Async Web Scraper
+    description: Concurrent scraper using httpx and asyncio that crawls multiple pages simultaneously, parses HTML with BeautifulSoup, and stores results in SQLite.
+    difficulty: intermediate
+    concepts: [httpx, asyncio, BeautifulSoup, SQLite, Rate Limiting]
+  - name: CLI Tool with Typer
+    description: Multi-command CLI built with Typer featuring subcommands, TOML config file support, rich terminal output with colors and progress bars.
+    difficulty: beginner
+    concepts: [Typer, TOML, rich, argparse, Click, subprocess]
+  - name: ML Classification Pipeline
+    description: End-to-end pipeline with scikit-learn that trains a classifier, evaluates with cross-validation, persists the model with joblib, and exposes predictions via a FastAPI endpoint.
+    difficulty: advanced
+    concepts: [scikit-learn, joblib, pandas, FastAPI, Cross-Validation, Feature Engineering]
 exercises: [py-001, py-002, py-003]
 ---
 

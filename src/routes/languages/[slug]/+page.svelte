@@ -69,6 +69,29 @@
     </div>
   </section>
 
+  <!-- ── Project Ideas ─────────────────────────────────────── -->
+  {#if ((meta.projects as any[]) ?? []).length}
+    <section class="section section--projects">
+      <h2 class="section-title">Project Ideas</h2>
+      <div class="projects-grid">
+        {#each (meta.projects as {name:string;description:string;difficulty:string;concepts:string[]}[]) as project}
+          <div class="project-card">
+            <div class="project-header">
+              <strong class="project-name">{project.name}</strong>
+              <span class="project-difficulty project-difficulty--{project.difficulty}">{project.difficulty}</span>
+            </div>
+            <p class="project-desc">{project.description}</p>
+            <div class="project-concepts">
+              {#each project.concepts as concept}
+                <span class="concept-tag">{concept}</span>
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+  {/if}
+
   <!-- ── Exercises CTA ──────────────────────────────────────── -->
   {#if (meta.exercises as string[]).length}
     <section class="section section--exercises">
@@ -177,7 +200,8 @@
   .section--frameworks { animation: fadeUp 0.45s ease 0.12s both; }
   .section--glossary   { animation: fadeUp 0.45s ease 0.19s both; }
   .section--content    { animation: fadeUp 0.45s ease 0.26s both; }
-  .section--exercises  { animation: fadeUp 0.45s ease 0.33s both; border-bottom: none; }
+  .section--projects   { animation: fadeUp 0.45s ease 0.33s both; }
+  .section--exercises  { animation: fadeUp 0.45s ease 0.40s both; border-bottom: none; }
 
   .section-title {
     font-family: var(--font);
@@ -336,6 +360,96 @@
     margin: 1.25rem 0;
     color: var(--text-dim);
     font-size: 0.9rem;
+  }
+
+  /* ── Project Ideas ───────────────────────────────────────── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    gap: 1rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+    cursor: default;
+  }
+  .project-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  .project-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .project-name {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-bright);
+  }
+
+  .project-difficulty {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 99px;
+    border: 1px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .project-difficulty--beginner {
+    border-color: rgba(34, 197, 94, 0.35);
+    background: rgba(34, 197, 94, 0.08);
+    color: rgb(74, 222, 128);
+  }
+  .project-difficulty--intermediate {
+    border-color: rgba(234, 179, 8, 0.35);
+    background: rgba(234, 179, 8, 0.08);
+    color: rgb(250, 204, 21);
+  }
+  .project-difficulty--advanced {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.08);
+    color: rgb(248, 113, 113);
+  }
+
+  .project-desc {
+    font-family: var(--font);
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .project-concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+
+  .concept-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.03em;
+    padding: 0.18rem 0.5rem;
+    border-radius: 4px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    color: var(--text-dim);
   }
 
   /* ── Exercises CTA ───────────────────────────────────────── */

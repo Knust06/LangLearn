@@ -16,6 +16,27 @@ glossary:
     definition: Language Integrated Query — SQL-like syntax for querying collections in C#
   - term: Delegate
     definition: A type-safe function pointer; the basis for events and lambdas in C#
+projects:
+  - name: REST API with EF Core
+    description: Build a product catalog API using ASP.NET Core, Entity Framework Core with repository pattern, and JWT authentication middleware.
+    difficulty: intermediate
+    concepts: [ASP.NET Core, Entity Framework, Repository Pattern, JWT, Dependency Injection]
+  - name: File Import Processor
+    description: Console app that reads CSV/XML files from a directory, maps records to domain objects, validates each row, and persists results to SQLite with error reporting.
+    difficulty: beginner
+    concepts: [File I/O, LINQ, SQLite, Error Handling, Domain Classes]
+  - name: Background Job Service
+    description: IHostedService that polls a queue, processes items concurrently with SemaphoreSlim, handles cancellation tokens, and retries with exponential backoff.
+    difficulty: advanced
+    concepts: [IHostedService, CancellationToken, SemaphoreSlim, Retry, async/await]
+  - name: Webhook Dispatcher
+    description: Service that receives domain events, serializes payloads with System.Text.Json, dispatches HTTP webhooks to registered endpoints, and logs failures to a database.
+    difficulty: intermediate
+    concepts: [HttpClient, System.Text.Json, Domain Events, SQLite, Logging]
+  - name: Market Data Aggregator
+    description: Parse market data feeds (XML/CSV), aggregate OHLCV prices by asset class using the Strategy pattern, and expose results through a typed in-memory repository.
+    difficulty: advanced
+    concepts: [XML Parsing, Strategy Pattern, Generics, Repository, LINQ Aggregation]
 exercises: []
 ---
 
@@ -24,58 +45,250 @@ exercises: []
 ### Variables
 
 ```csharp
-int x = 10;
-var name = "Alice";   // type inferred
-const double Pi = 3.14;
+using System;
+
+namespace MyApp.Core
+{
+    class OrderSettings
+    {
+        public const int MaxItems = 100;
+        private readonly string _connectionString;
+        private static readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(30);
+
+        public string DatabaseName { get; private set; }
+        public bool IsProduction { get; }
+
+        public OrderSettings(string connectionString, string dbName, bool isProduction)
+        {
+            _connectionString = connectionString
+                ?? throw new ArgumentNullException(nameof(connectionString));
+            DatabaseName = dbName;
+            IsProduction = isProduction;
+        }
+    }
+}
 ```
 
 ### Functions
 
 ```csharp
-string Greet(string name) => $"Hello, {name}";
+using System;
+using System.Text.RegularExpressions;
+
+namespace MyApp.Core.Helpers
+{
+    static class TextUtils
+    {
+        public static string Slugify(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new ArgumentException("Input cannot be empty.", nameof(input));
+
+            var lower = input.Trim().ToLowerInvariant();
+            return Regex.Replace(lower, @"[^a-z0-9]+", "-").Trim('-');
+        }
+
+        public static string Truncate(string text, int maxLength, string suffix = "...")
+        {
+            if (text.Length <= maxLength)
+                return text;
+
+            return text[..(maxLength - suffix.Length)] + suffix;
+        }
+
+        private static bool IsAsciiLetter(char c) =>
+            (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+}
 ```
 
 ### Classes
 
 ```csharp
-public class Animal {
-    public string Name { get; }
-    public Animal(string name) => Name = name;
-    public string Speak() => $"{Name} makes a sound";
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MyApp.Domain
+{
+    public class Order
+    {
+        private readonly List<OrderItem> _items = new();
+
+        public Guid Id { get; } = Guid.NewGuid();
+        public DateTime CreatedAt { get; } = DateTime.UtcNow;
+        public OrderStatus Status { get; private set; } = OrderStatus.Pending;
+        public decimal Total => _items.Sum(i => i.Subtotal);
+
+        public void AddItem(string productId, int quantity, decimal unitPrice)
+        {
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be positive.");
+
+            _items.Add(new OrderItem(productId, quantity, unitPrice));
+        }
+
+        public void Confirm()
+        {
+            if (Status != OrderStatus.Pending)
+                throw new InvalidOperationException($"Cannot confirm order in {Status} state.");
+
+            Status = OrderStatus.Confirmed;
+        }
+
+        public IReadOnlyList<OrderItem> GetItems() => _items.AsReadOnly();
+    }
 }
 ```
 
 ### Loops
 
 ```csharp
-for (int i = 0; i < 10; i++) Console.WriteLine(i);
-foreach (var item in items) Console.WriteLine(item);
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MyApp.Core
+{
+    class ReportBuilder
+    {
+        public IEnumerable<string> BuildSummary(IEnumerable<Order> orders)
+        {
+            var lines = new List<string>();
+            var grouped = orders.GroupBy(o => o.Status);
+
+            foreach (var group in grouped)
+            {
+                decimal total = group.Sum(o => o.Total);
+                lines.Add($"{group.Key}: {group.Count()} orders — R${total:F2}");
+            }
+
+            for (int i = 0; i < lines.Count; i++)
+                lines[i] = $"[{i + 1}] {lines[i]}";
+
+            while (lines.Count > 0 && string.IsNullOrWhiteSpace(lines[^1]))
+                lines.RemoveAt(lines.Count - 1);
+
+            return lines;
+        }
+    }
+}
 ```
 
 ### Error Handling
 
 ```csharp
-try {
-    int n = int.Parse("abc");
-} catch (FormatException e) {
-    Console.WriteLine(e.Message);
-} finally {
-    Console.WriteLine("always runs");
+using System;
+using System.IO;
+
+namespace MyApp.Infrastructure
+{
+    class FileImporter
+    {
+        private readonly string _basePath;
+
+        public FileImporter(string basePath)
+        {
+            _basePath = basePath;
+        }
+
+        public string Import(string fileName)
+        {
+            var path = Path.Combine(_basePath, fileName);
+            try
+            {
+                return File.ReadAllText(path);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw new ImportException($"File not found: {fileName}", ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                throw new ImportException($"Permission denied: {fileName}", ex);
+            }
+            finally
+            {
+                Console.WriteLine($"[FileImporter] Attempted: {fileName}");
+            }
+        }
+    }
+
+    class ImportException : Exception
+    {
+        public ImportException(string message, Exception inner) : base(message, inner) { }
+    }
 }
 ```
 
 ### Async / Concurrency
 
 ```csharp
-async Task<string> FetchDataAsync() {
-    await Task.Delay(100);
-    return "data";
+using System;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace MyApp.Infrastructure
+{
+    class MarketDataClient
+    {
+        private readonly HttpClient _http;
+        private readonly string _baseUrl;
+
+        public MarketDataClient(HttpClient http, string baseUrl)
+        {
+            _http = http;
+            _baseUrl = baseUrl;
+        }
+
+        public async Task<T> GetAsync<T>(string endpoint, CancellationToken ct = default)
+        {
+            var response = await _http.GetAsync($"{_baseUrl}/{endpoint}", ct);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync(ct);
+            return JsonSerializer.Deserialize<T>(json)
+                ?? throw new InvalidOperationException("Empty response body.");
+        }
+
+        public async Task<string[]> GetTickersAsync(CancellationToken ct = default) =>
+            await GetAsync<string[]>("tickers", ct);
+    }
 }
 ```
 
 ### Generics
 
 ```csharp
-T Max<T>(T a, T b) where T : IComparable<T> =>
-    a.CompareTo(b) > 0 ? a : b;
+using System;
+using System.Collections.Generic;
+
+namespace MyApp.Data
+{
+    class Repository<TEntity, TKey>
+        where TEntity : class
+        where TKey : IEquatable<TKey>
+    {
+        private readonly Dictionary<TKey, TEntity> _store = new();
+
+        public void Save(TKey id, TEntity entity)
+        {
+            ArgumentNullException.ThrowIfNull(entity);
+            _store[id] = entity;
+        }
+
+        public bool TryGet(TKey id, out TEntity? entity) =>
+            _store.TryGetValue(id, out entity);
+
+        public void Delete(TKey id)
+        {
+            if (!_store.Remove(id))
+                throw new KeyNotFoundException($"Entity with key '{id}' not found.");
+        }
+
+        public IReadOnlyDictionary<TKey, TEntity> All => _store;
+    }
+}
 ```
